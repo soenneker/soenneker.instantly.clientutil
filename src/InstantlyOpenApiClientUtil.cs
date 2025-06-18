@@ -24,7 +24,7 @@ public sealed class InstantlyOpenApiClientUtil : IInstantlyOpenApiClientUtil
         {
             HttpClient httpClient = await httpClientUtil.Get(token).NoSync();
 
-            var apiKey = configuration.GetValueStrict<string>("GH:ApiKey");
+            var apiKey = configuration.GetValueStrict<string>("Instantly:ApiKey");
 
             var requestAdapter = new HttpClientRequestAdapter(new BearerAuthenticationProvider(apiKey), httpClient: httpClient);
 
