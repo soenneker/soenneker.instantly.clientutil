@@ -15,8 +15,7 @@ public static class InstantlyOpenApiClientUtilRegistrar
     /// </summary>
     public static IServiceCollection AddInstantlyOpenApiClientUtilAsSingleton(this IServiceCollection services)
     {
-        services.AddInstantlyClientAsSingleton()
-                .TryAddSingleton<IInstantlyOpenApiClientUtil, InstantlyOpenApiClientUtil>();
+        services.AddInstantlyClientAsSingleton().TryAddSingleton<IInstantlyOpenApiClientUtil, InstantlyOpenApiClientUtil>();
 
         return services;
     }
@@ -26,8 +25,7 @@ public static class InstantlyOpenApiClientUtilRegistrar
     /// </summary>
     public static IServiceCollection AddInstantlyOpenApiClientUtilAsScoped(this IServiceCollection services)
     {
-        services.AddInstantlyClientAsSingleton()
-                .TryAddScoped<IInstantlyOpenApiClientUtil, InstantlyOpenApiClientUtil>();
+        services.AddInstantlyClientAsSingleton().TryAddScoped<IInstantlyOpenApiClientUtil, InstantlyOpenApiClientUtil>();
 
         return services;
     }
