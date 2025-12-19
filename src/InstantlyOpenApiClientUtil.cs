@@ -24,7 +24,7 @@ public sealed class InstantlyOpenApiClientUtil : IInstantlyOpenApiClientUtil
 
     public InstantlyOpenApiClientUtil(IInstantlyClient httpClientUtil, IConfiguration configuration, ILogger<InstantlyOpenApiClientUtil> logger)
     {
-        _client = new AsyncSingleton<InstantlyOpenApiClient>(async (token, _) =>
+        _client = new AsyncSingleton<InstantlyOpenApiClient>(async token =>
         {
             var logging = configuration.GetValue<bool>("Instantly:RequestResponseLogging");
 
