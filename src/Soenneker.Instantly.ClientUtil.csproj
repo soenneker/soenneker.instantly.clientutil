@@ -44,7 +44,7 @@
     <ItemGroup>
         <PackageReference Include="Soenneker.HttpClients.LoggingHandler" Version="4.0.121" />
         <PackageReference Include="Soenneker.Instantly.OpenApiClient" Version="4.0.196" />
-        <PackageReference Include="Soenneker.Kiota.BearerAuthenticationProvider" Version="4.0.27" />
+        <PackageReference Include="Soenneker.Kiota.BearerAuthenticationProvider" Version="4.0.30" />
         <PackageReference Include="Soenneker.Instantly.Client" Version="4.0.1730" />
         <PackageReference Include="Soenneker.Utils.AsyncSingleton" Version="4.0.754" />
     </ItemGroup>
