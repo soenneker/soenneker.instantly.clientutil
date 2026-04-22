@@ -1,20 +1,19 @@
-﻿using Soenneker.Instantly.ClientUtil.Abstract;
-using Soenneker.Tests.FixturedUnit;
-using Xunit;
+using Soenneker.Instantly.ClientUtil.Abstract;
+using Soenneker.Tests.HostedUnit;
 
 namespace Soenneker.Instantly.ClientUtil.Tests;
 
-[Collection("Collection")]
-public sealed class InstantlyOpenApiClientUtilTests : FixturedUnitTest
+[ClassDataSource<Host>(Shared = SharedType.PerTestSession)]
+public sealed class InstantlyOpenApiClientUtilTests : HostedUnitTest
 {
     private readonly IInstantlyOpenApiClientUtil _kiotaclient;
 
-    public InstantlyOpenApiClientUtilTests(Fixture fixture, ITestOutputHelper output) : base(fixture, output)
+    public InstantlyOpenApiClientUtilTests(Host host) : base(host)
     {
         _kiotaclient = Resolve<IInstantlyOpenApiClientUtil>(true);
     }
 
-    [Fact]
+    [Test]
     public void Default()
     {
 
