@@ -68,12 +68,19 @@ public sealed class InstantlyOpenApiClientUtil : IInstantlyOpenApiClientUtil, ID
 
     public ValueTask<InstantlyOpenApiClient> Get(CancellationToken cancellationToken = default) => _client.Get(cancellationToken);
 
+    /// <summary>
+    /// Releases resources used by the current instance.
+    /// </summary>
     public void Dispose()
     {
         _httpClient?.Dispose();
         _client.Dispose();
     }
 
+    /// <summary>
+    /// Asynchronously releases resources used by the current instance.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     public ValueTask DisposeAsync()
     {
         _httpClient?.Dispose();
