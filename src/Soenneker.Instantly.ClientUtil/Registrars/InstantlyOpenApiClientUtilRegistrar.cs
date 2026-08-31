@@ -6,7 +6,7 @@ using Soenneker.Instantly.ClientUtil.Abstract;
 namespace Soenneker.Instantly.ClientUtil.Registrars;
 
 /// <summary>
-/// A .NET thread-safe singleton HttpClient for GitHub
+/// Registers the lazily created Instantly generated-client provider.
 /// </summary>
 public static class InstantlyOpenApiClientUtilRegistrar
 {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Kiota.Abstractions.Authentication;
 using Microsoft.Kiota.Http.HttpClientLibrary;
 using Soenneker.Extensions.Configuration;
 using Soenneker.Extensions.ValueTask;
@@ -7,16 +8,15 @@ using Soenneker.HttpClients.LoggingHandler;
 using Soenneker.Instantly.Client.Abstract;
 using Soenneker.Instantly.ClientUtil.Abstract;
 using Soenneker.Instantly.OpenApiClient;
-using Soenneker.Kiota.BearerAuthenticationProvider;
 using Soenneker.Utils.AsyncSingleton;
 using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Soenneker.Instantly.ClientUtil;
 
-/// <inheritdoc cref="IInstantlyOpenApiClientUtil"/>
 public sealed class InstantlyOpenApiClientUtil : IInstantlyOpenApiClientUtil, IDisposable, IAsyncDisposable
 {
     private readonly AsyncSingleton<InstantlyOpenApiClient> _client;
@@ -26,6 +26,7 @@ public sealed class InstantlyOpenApiClientUtil : IInstantlyOpenApiClientUtil, ID
     private readonly ILogger<InstantlyOpenApiClientUtil> _logger;
 
     private HttpClient? _httpClient;
+    private bool _ownsHttpClient;
 
     public InstantlyOpenApiClientUtil(IInstantlyClient httpClientUtil, IConfiguration configuration, ILogger<InstantlyOpenApiClientUtil> logger)
     {
@@ -40,6 +41,7 @@ public sealed class InstantlyOpenApiClientUtil : IInstantlyOpenApiClientUtil, ID
     private async ValueTask<InstantlyOpenApiClient> CreateClient(CancellationToken token)
     {
         var logging = _configuration.GetValue<bool>("Instantly:RequestResponseLogging");
+        var apiKey = _configuration.GetValueStrict<string>("Instantly:ApiKey");
 
         if (logging)
         {
@@ -52,6 +54,8 @@ public sealed class InstantlyOpenApiClientUtil : IInstantlyOpenApiClientUtil, ID
             };
 
             _httpClient = new HttpClient(loggingHandler);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
+            _ownsHttpClient = true;
         }
         else
         {
@@ -59,31 +63,26 @@ public sealed class InstantlyOpenApiClientUtil : IInstantlyOpenApiClientUtil, ID
                                                .NoSync();
         }
 
-        var apiKey = _configuration.GetValueStrict<string>("Instantly:ApiKey");
-
-        var requestAdapter = new HttpClientRequestAdapter(new BearerAuthenticationProvider(apiKey), httpClient: _httpClient);
+        var requestAdapter = new HttpClientRequestAdapter(new AnonymousAuthenticationProvider(), httpClient: _httpClient);
 
         return new InstantlyOpenApiClient(requestAdapter);
     }
 
     public ValueTask<InstantlyOpenApiClient> Get(CancellationToken cancellationToken = default) => _client.Get(cancellationToken);
 
-    /// <summary>
-    /// Releases resources used by the current instance.
-    /// </summary>
     public void Dispose()
     {
-        _httpClient?.Dispose();
         _client.Dispose();
+
+        if (_ownsHttpClient)
+            _httpClient?.Dispose();
     }
 
-    /// <summary>
-    /// Asynchronously releases resources used by the current instance.
-    /// </summary>
-    /// <returns>A task that represents the asynchronous operation.</returns>
-    public ValueTask DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
-        _httpClient?.Dispose();
-        return _client.DisposeAsync();
+        await _client.DisposeAsync().ConfigureAwait(false);
+
+        if (_ownsHttpClient)
+            _httpClient?.Dispose();
     }
 }
