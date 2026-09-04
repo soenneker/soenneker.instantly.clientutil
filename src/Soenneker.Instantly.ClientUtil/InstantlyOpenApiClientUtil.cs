@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 
 namespace Soenneker.Instantly.ClientUtil;
 
+/// <inheritdoc cref="IInstantlyOpenApiClientUtil" />
 public sealed class InstantlyOpenApiClientUtil : IInstantlyOpenApiClientUtil, IDisposable, IAsyncDisposable
 {
     private readonly AsyncSingleton<InstantlyOpenApiClient> _client;
