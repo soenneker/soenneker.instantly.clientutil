@@ -42,7 +42,7 @@ public sealed class InstantlyOpenApiClientUtil : IInstantlyOpenApiClientUtil, ID
     private async ValueTask<InstantlyOpenApiClient> CreateClient(CancellationToken token)
     {
         var logging = _configuration.GetValue<bool>("Instantly:RequestResponseLogging");
-        var apiKey = _configuration.GetValueStrict<string>("Instantly:ApiKey");
+        var apiKey = _configuration.GetStringStrict("Instantly:ApiKey");
 
         if (logging)
         {
