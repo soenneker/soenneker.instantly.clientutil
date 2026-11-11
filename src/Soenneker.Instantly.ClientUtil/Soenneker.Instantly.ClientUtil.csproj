@@ -47,7 +47,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Soenneker.HttpClients.LoggingHandler" Version="11.0.282" />
+        <PackageReference Include="Soenneker.HttpClients.LoggingHandler" Version="11.0.283" />
         <PackageReference Include="Soenneker.Instantly.OpenApiClient" Version="11.0.376" />
         <PackageReference Include="Soenneker.Instantly.Client" Version="11.0.1998" />
     </ItemGroup>
